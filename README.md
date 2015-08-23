@@ -5,7 +5,9 @@ A lightweight functional wrapper using knex to model data.
 ## Objectives
 
 * Provide helpers for data retrieval and saving without magic
-* Export POJSO to make easily extensible
+* Export plain old JavaScript objects to extend easily
+* Promise based for future proofing (generators/async-await etc)
+* Throw errors which are easy to handle
 
 ## Usage
 
@@ -14,22 +16,23 @@ A lightweight functional wrapper using knex to model data.
 Export a function returning a configured knex object
 
 ```js
-import knex from "knex";
+var knex = require("knex");
 
-let db;
+var db;
 
-export function connection () {
+exports.connection = function connection () {
   if (!db) {
-    throw "No db"
+    throw "No db";
   } else {
     return db;
   }
-}
+};
 
-export function connect (opts) {
+exports.connect = function connect (opts) {
   db = knex(opts);
   return db;
-}
+};
+
 ```
 
 ### models.js
@@ -37,13 +40,16 @@ export function connect (opts) {
 Configure the models
 
 ```js
-import Model from "knex-model-wrapper";
-import db from "./db";
+var Model = require("knex-model-wrapper");
+var db = require("./db");
 
-export const User = Model({
+exports.User = Model({
   tableName: "users",
   db: db.connection,
   schema: {
+    id: {
+      type: "number"
+    },
     email: {
       type: "email",
       required: true
@@ -54,21 +60,6 @@ export const User = Model({
     }
   }
 });
-
-export const Post = Model({
-  tableName: "posts",
-  db: db,
-  schema: {
-    userId: {
-      type: "number",
-      filters: "toInt",
-      required: true
-    },
-    text: {
-      type: "string"
-    }
-  }
-});
 ```
 
 ### use.js
@@ -76,10 +67,11 @@ export const Post = Model({
 Use the models to do cool stuff
 
 ```js
-import db from "./db";
-import models from "./models";
+var db = require("./db");
+var models = require("./models");
+db.connect();
 
-db.connect().then(function (db) {
+function createUser () {
   models.User.insert({
     email: "me@example.com",
     password: "a9789zf89209df3232" // hashed password :)
@@ -90,3 +82,10 @@ db.connect().then(function (db) {
   })
 })
 ```
+
+
+## Tests
+
+A postgreSQL database is a pre-requisite for running the tests. Create a database and configure it in the knexfile. To generate a knexfile run `npm run setup-tests`.
+
+Test are run using mocha `./node_modules/.bin/mocha` or the npm test script `npm test`.

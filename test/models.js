@@ -5,6 +5,9 @@ exports.User = Model({
   tableName: "users",
   db: db.connection,
   schema: {
+    id: {
+      type: "number"
+    },
     email: {
       type: "email",
       required: true
@@ -12,21 +15,6 @@ exports.User = Model({
     password: {
       type: "string",
       required: true
-    }
-  }
-});
-
-exports.Post = Model({
-  tableName: "posts",
-  db: db.connection,
-  schema: {
-    userId: {
-      type: "number",
-      filters: "toInt",
-      required: true
-    },
-    text: {
-      type: "string"
     }
   }
 });

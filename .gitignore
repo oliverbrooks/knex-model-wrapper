@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 test/data
 npm-debug.log
+knexfile.js

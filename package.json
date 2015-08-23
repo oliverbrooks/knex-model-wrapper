@@ -4,8 +4,8 @@
   "description": "Lightweight functional wrapper around knex for modeling data",
   "main": "index.js",
   "scripts": {
-    "pretest": "NODE_ENV=test knex migrate:latest --knexfile ./test/knexfile.js",
-    "test": "NODE_ENV=test node --harmony test/index.js"
+    "test": "NODE_ENV=test mocha",
+    "setup-tests": "cp -f ./test/knexfile.js knexfile.js"
   },
   "keywords": [
     "knex",
@@ -23,7 +23,7 @@
     "expect.js": "^0.3.1",
     "knex": "^0.8.6",
     "mocha": "^2.2.5",
-    "sqlite3": "^3.0.10",
+    "pg": "^4.4.1",
     "tape": "^4.2.0"
   }
 }
