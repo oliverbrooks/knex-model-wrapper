@@ -1,15 +1,12 @@
 process.env.NODE_ENV = "test";
 
 var db = require("./db");
-var knexConfig = require("../knexfile");
 var models = require("./models");
 var expect = require("expect.js");
 
-db.connect(knexConfig.test);
-
 function prepData () {
-  return db.connection().schema.dropTableIfExists("users").then(function () {
-    return db.connection().schema.createTable("users", function(t) {
+  return db.schema.dropTableIfExists("users").then(function () {
+    return db.schema.createTable("users", function(t) {
       t.increments("id").primary();
       t.string("email").unique();
       t.string("password");
@@ -18,7 +15,7 @@ function prepData () {
 }
 
 function insertUser (data) {
-  return db.connection()("users").insert(data).returning("*");
+  return db("users").insert(data).returning("*");
 }
 
 describe("knex-model-wrapper", function () {

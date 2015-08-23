@@ -17,22 +17,10 @@ Export a function returning a configured knex object
 
 ```js
 var knex = require("knex");
+var knexConfig = require("../knexfile");
+var db = knex(knexConfig.test);
 
-var db;
-
-exports.connection = function connection () {
-  if (!db) {
-    throw "No db";
-  } else {
-    return db;
-  }
-};
-
-exports.connect = function connect (opts) {
-  db = knex(opts);
-  return db;
-};
-
+module.exports = db;
 ```
 
 ### models.js
@@ -45,7 +33,7 @@ var db = require("./db");
 
 exports.User = Model({
   tableName: "users",
-  db: db.connection,
+  db: db,
   schema: {
     id: {
       type: "number"
