@@ -40,6 +40,50 @@ describe("knex-model-wrapper", function () {
         });
     });
 
+    it("should insert multiple documents", function () {
+      var testAttrs = [
+        {
+          email: "insert1@test.com",
+          password: "fishfishfish"
+        },
+        {
+          email: "insert2@test.com",
+          password: "dogdogdog"
+        }
+      ];
+      return models.User
+        .insert(testAttrs)
+        .then(function (users) {
+          expect(users).to.have.length(2);
+          expect(users[0]).to.have.keys(["id", "email", "password"]);
+          expect(users[0].email).to.equal(testAttrs[0].email);
+          expect(users[0].password).to.equal(testAttrs[0].password);
+          expect(users[0].id).to.not.be(undefined);
+          expect(users[1]).to.have.keys(["id", "email", "password"]);
+          expect(users[1].email).to.equal(testAttrs[1].email);
+          expect(users[1].password).to.equal(testAttrs[1].password);
+          expect(users[1].id).to.not.be(undefined);
+        });
+    });
+
+    it("should throw an error on validation error", function () {
+      var testAttrs = {
+        email: "insert@test.com"
+      };
+      try {
+        models.User
+          .insert(testAttrs)
+          .exec()
+          .then(function () {
+            expect().fail("shouldn't get here!");
+          });
+      } catch (err) {
+        expect(err).to.be.a(Error);
+        expect(err.message).to.match(/invalid model attributes/);
+        expect(err.errors).to.have.keys("password");
+      }
+    });
+
     it("should throw an error on constraint violation", function () {
       var testAttrs = {
         email: "duplicate@test.com",
@@ -84,6 +128,24 @@ describe("knex-model-wrapper", function () {
           expect(updatedUsers[0].password).to.equal(newAttrs.password);
           expect(updatedUsers[0].id).to.equal(users[0].id);
         });
+    });
+
+    it("should throw an error on validation error", function () {
+      var testAttrs = {
+        email: null
+      };
+      try {
+        models.User
+          .insert(testAttrs)
+          .exec()
+          .then(function () {
+            expect().fail("shouldn't get here!");
+          });
+      } catch (err) {
+        expect(err).to.be.a(Error);
+        expect(err.message).to.match(/invalid model attributes/);
+        expect(err.errors).to.have.keys("email");
+      }
     });
   });
 

@@ -9,8 +9,11 @@ exports.User = Model({
       type: "number"
     },
     email: {
-      type: "email",
-      required: true
+      type: "string",
+      required: true,
+      validators: {
+        email: true
+      }
     },
     password: {
       type: "string",

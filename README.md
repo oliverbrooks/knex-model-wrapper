@@ -1,5 +1,9 @@
 # Knex Model Wrapper
 
+![circleci](https://circleci.com/gh/oliverbrooks/knex-model-wrapper.png?style=shield)
+![Dependency Status](https://david-dm.org/oliverbrooks/knex-model-wrapper.svg)
+![Dev Dependency Status](https://david-dm.org/oliverbrooks/knex-model-wrapper/dev-status.svg)
+
 A lightweight functional wrapper using knex to model data.
 
 ## Objectives
