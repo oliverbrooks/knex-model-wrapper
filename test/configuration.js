@@ -1,6 +1,6 @@
 var expect = require("expect.js");
 var Model = require("../");
-var db = require("./db");
+var db = require("./support/db");
 
 
 describe("new Model(config)", function () {

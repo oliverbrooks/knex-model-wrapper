@@ -1,4 +1,4 @@
-var Model = require("../");
+var Model = require("../../");
 var db = require("./db");
 var model = new Model({
   db: db
