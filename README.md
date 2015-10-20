@@ -15,20 +15,22 @@ A lightweight functional wrapper using knex to model data.
 
 ## Usage
 
-### models.js
+### Model definition
 
-Configure the models
+Configure the models with your knex connection.
 
 ```js
 var Model = require("knex-model-wrapper");
 var db = require("knex")();
 db.connect();
 
+// Configure the model constructor
 var model = new Model({
   db: db
 });
 
-exports.User = model.create({
+// Create models
+var User = model.create({
   tableName: "users",
   schema: {
     id: {
@@ -46,23 +48,38 @@ exports.User = model.create({
 });
 ```
 
-### use.js
+### Using models
 
-Use the models to do cool stuff
+See `lib/index.js` for full list of functions.
 
 ```js
-var models = require("./models");
 
-function createUser () {
-  models.User.insert({
-    email: "me@example.com",
-    password: "a9789zf89209df3232" // hashed password :)
-  }).then(function (users) {
-    // do something with your user
-  }).catch(function (err) {
-    // do something with validation errors etc
-  })
-})
+User.insert({
+  email: "me@example.com",
+  password: "a9789zf89209df3232" // hashed password :)
+}).then(function (user) {
+  // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
+}).catch(function (err) {
+  // do something with validation errors etc
+});
+
+User.get(5).then(function (user) {
+  // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
+});
+
+User.update({id: 5}, {
+  email: "me@test.com"
+}).then(function (user) {
+  // {id: 5, email: "me@test.com", password: "a9789zf89209df3232"}
+});
+
+User.count().then(function (user) {
+  // {count: 1}
+});
+
+User.delete(5).then(function (user) {
+  // {deleted: 1}
+});
 ```
 
 ## Pro Tips
