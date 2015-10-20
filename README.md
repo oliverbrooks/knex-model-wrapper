@@ -15,35 +15,27 @@ A lightweight functional wrapper using knex to model data.
 
 ## Usage
 
-### db.js
-
-Export a function returning a configured knex object
-
-```js
-var knex = require("knex");
-var knexConfig = require("../knexfile");
-var db = knex(knexConfig.test);
-
-module.exports = db;
-```
-
 ### models.js
 
 Configure the models
 
 ```js
 var Model = require("knex-model-wrapper");
-var db = require("./db");
+var db = require("knex")();
+db.connect();
 
-exports.User = Model({
+var model = new Model({
+  db: db
+});
+
+exports.User = model.create({
   tableName: "users",
-  db: db,
   schema: {
     id: {
       type: "number"
     },
     email: {
-      type: "email",
+      type: "string",
       required: true
     },
     password: {
@@ -59,9 +51,7 @@ exports.User = Model({
 Use the models to do cool stuff
 
 ```js
-var db = require("./db");
 var models = require("./models");
-db.connect();
 
 function createUser () {
   models.User.insert({
@@ -75,6 +65,39 @@ function createUser () {
 })
 ```
 
+## Pro Tips
+
+knex-model-wrapper uses [knex](http://knexjs.org/) which can be accessed via the `db` key of models for building custom queries.
+
+knex-model-wrapper uses [hannibal](https://www.npmjs.com/package/hannibal) to validate data and perform any transforms. This is exposed on the model instance as the `hannibal` key. Custom validators and transforms can be registered when instantiating the model object.
+
+Schemas schemas can be composed together easily. For example if all your models have id, createdAt and updatedAt properties a schema can be defined for those base attributes and merged into all other schemas.
+
+```
+var baseSchema = {
+  id: {
+    type: "number"
+  },
+  createdAt: {
+    type: "date",
+    default: function () {
+      return new Date();
+    }
+  },
+  updatedAt: {
+    type: "date",
+    transforms: "newDate"
+  }
+};
+
+var User = model.create({
+  schema: Object.assign(baseSchema, {
+    firstName: {
+      type: "string"
+    }  
+  })
+});
+```
 
 ## Tests
 

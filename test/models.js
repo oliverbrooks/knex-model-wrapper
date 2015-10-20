@@ -1,9 +1,11 @@
 var Model = require("../");
 var db = require("./db");
+var model = new Model({
+  db: db
+});
 
-exports.User = Model({
+exports.User = model.create({
   tableName: "users",
-  db: db.connection,
   schema: {
     id: {
       type: "number"
