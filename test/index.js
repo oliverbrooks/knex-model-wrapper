@@ -5,6 +5,7 @@ require("./support/db");
 require("./configuration");
 require("./transforms");
 require("./validators");
+require("./model/db");
 require("./model/delete");
 require("./model/delete_many");
 require("./model/first");
