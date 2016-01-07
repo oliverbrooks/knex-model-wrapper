@@ -33,16 +33,6 @@ describe("transforms", function () {
       expect(id).eql(null);
     });
 
-    it("should return null if given empty string", function () {
-      var id = transforms.ensureId("");
-      expect(id).eql(null);
-    });
-
-    it("should return null if given NaN", function () {
-      var id = transforms.ensureId(NaN);
-      expect(id).eql(null);
-    });
-
     it("should return 0 if given 0", function () {
       var id = transforms.ensureId(0);
       expect(id).eql(0);
