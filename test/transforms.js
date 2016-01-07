@@ -8,6 +8,11 @@ describe("transforms", function () {
       expect(id).to.be.a("number").and.eql(5);
     });
 
+    it("should return a negative number if given a negative number", function () {
+      var id = transforms.ensureId(-5);
+      expect(id).to.be.a("number").and.eql(-5);
+    });
+
     it("should return a number if given a string", function () {
       var id = transforms.ensureId("5");
       expect(id).to.be.a("number").and.eql(5);
@@ -26,6 +31,11 @@ describe("transforms", function () {
     it("should return null if given", function () {
       var id = transforms.ensureId(null);
       expect(id).eql(null);
+    });
+
+    it("should return 0 if given 0", function () {
+      var id = transforms.ensureId(0);
+      expect(id).eql(0);
     });
   });
 
