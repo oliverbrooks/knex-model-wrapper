@@ -47,7 +47,6 @@ describe("model", function () {
 
       models.User
         .insertMany(testAttrs)
-        .exec()
         .then(function () {
           expect().fail("shouldn't get here!");
         })
