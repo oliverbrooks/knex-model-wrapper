@@ -45,18 +45,17 @@ describe("model", function () {
         }
       ];
 
-      try {
-        models.User
-          .insertMany(testAttrs)
-          .exec()
-          .then(function () {
-            expect().fail("shouldn't get here!");
-          });
-      } catch (err) {
-        expect(err).to.be.a(Error);
-        expect(err.message).to.match(/invalid model attributes/);
-        expect(err.errors).to.have.keys("password");
-      }
+      models.User
+        .insertMany(testAttrs)
+        .exec()
+        .then(function () {
+          expect().fail("shouldn't get here!");
+        })
+        .catch(function (err) {
+          expect(err).to.be.a(Error);
+          expect(err.message).to.match(/invalid model attributes/);
+          expect(err.errors).to.have.keys("password");
+        });
     });
   });
 });

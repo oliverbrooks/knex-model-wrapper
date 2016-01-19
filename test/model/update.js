@@ -39,18 +39,17 @@ describe("model", function () {
       var testAttrs = {
         email: null
       };
-      try {
-        models.User
-          .insert(testAttrs)
-          .exec()
-          .then(function () {
-            expect().fail("shouldn't get here!");
-          });
-      } catch (err) {
-        expect(err).to.be.a(Error);
-        expect(err.message).to.match(/invalid model attributes/);
-        expect(err.errors).to.have.keys("email");
-      }
+      models.User
+        .insert(testAttrs)
+        .exec()
+        .then(function () {
+          expect().fail("shouldn't get here!");
+        })
+        .catch(function (err) {
+          expect(err).to.be.a(Error);
+          expect(err.message).to.match(/invalid model attributes/);
+          expect(err.errors).to.have.keys("email");
+        });
     });
   });
 });
