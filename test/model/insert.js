@@ -28,18 +28,17 @@ describe("model", function () {
       var testAttrs = {
         email: "insert@test.com"
       };
-      try {
-        models.User
-          .insert(testAttrs)
-          .exec()
-          .then(function () {
-            expect().fail("shouldn't get here!");
-          });
-      } catch (err) {
-        expect(err).to.be.a(Error);
-        expect(err.message).to.match(/invalid model attributes/);
-        expect(err.errors).to.have.keys("password");
-      }
+
+      models.User
+        .insert(testAttrs)
+        .then(function () {
+          expect().fail("shouldn't get here!");
+        })
+        .catch(function (err) {
+          expect(err).to.be.a(Error);
+          expect(err.message).to.match(/invalid model attributes/);
+          expect(err.errors).to.have.keys("password");
+        });
     });
 
     it("should throw an error on constraint violation", function () {
