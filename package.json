@@ -4,7 +4,7 @@
   "description": "Lightweight functional wrapper around knex for modeling data",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha",
+    "test": "NODE_ENV=test mocha && ./node_modules/.bin/eslint lib test",
     "setup-tests": "cp -f ./test/knexfile.js knexfile.js"
   },
   "keywords": [
@@ -16,15 +16,14 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.1.1",
-    "hannibal": "^0.3.2",
+    "hannibal": "^0.5.0",
     "lodash": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^0.24.0",
+    "eslint": "^3.11.1",
     "expect.js": "^0.3.1",
-    "knex": "^0.9.0",
-    "mocha": "^2.2.5",
-    "pg": "^4.4.1",
-    "tape": "^4.2.0"
+    "knex": "^0.12.6",
+    "mocha": "^3.2.0",
+    "tape": "^4.6.3"
   }
 }

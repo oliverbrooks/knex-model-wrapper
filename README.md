@@ -111,7 +111,7 @@ var User = model.create({
   schema: Object.assign(baseSchema, {
     firstName: {
       type: "string"
-    }  
+    }
   })
 });
 ```
@@ -119,5 +119,11 @@ var User = model.create({
 ## Tests
 
 A postgreSQL database is a pre-requisite for running the tests. Create a database and configure it in the knexfile. To generate a knexfile run `npm run setup-tests`.
+
+To set up the test db with default settings in psql:
+
+```
+create database knex_model_wrapper_test;
+```
 
 Test are run using mocha `./node_modules/.bin/mocha` or the npm test script `npm test`.
