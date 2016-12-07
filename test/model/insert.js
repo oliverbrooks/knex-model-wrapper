@@ -3,7 +3,7 @@ var data = require("../support/data");
 var models = require("../support/models");
 
 describe("model", function () {
-  before(function () {
+  beforeEach(function () {
     return data.prepData();
   });
 
@@ -56,6 +56,48 @@ describe("model", function () {
           .catch(function (err) {
             expect(err).to.be.an(Error);
           });
+      });
+    });
+
+    describe("beforeHooks", function () {
+      it("should trigger a before hook", function () {
+        var didRun = false;
+        models.User.before("insert", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var testAttrs = {
+          email: "insert@test.com",
+          password: "fishfishfish"
+        };
+        return models.User.insert(testAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+    });
+
+    describe("afterHooks", function () {
+      it("should trigger an after hook", function () {
+        var didRun = false;
+        models.User.after("insert", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var testAttrs = {
+          email: "insert@test.com",
+          password: "fishfishfish"
+        };
+        return models.User.insert(testAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
       });
     });
   });

@@ -4,14 +4,14 @@ var models = require("../support/models");
 
 
 describe("model", function () {
-  before(function () {
+  beforeEach(function () {
     return data.prepData();
   });
 
   describe("update", function () {
     var users;
 
-    before(function () {
+    beforeEach(function () {
       var testAttrs = {
         email: "toUpdate@test.com",
         password: "fishfishfish"
@@ -49,6 +49,50 @@ describe("model", function () {
           expect(err.message).to.match(/invalid model attributes/);
           expect(err.errors).to.have.keys("email");
         });
+    });
+
+    describe("beforeHooks", function () {
+      it("should trigger a before hook", function () {
+        var didRun = false;
+        models.User.before("update", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var newAttrs = {
+          email: "update2@test.com",
+          password: "fishfishfish"
+        };
+
+        return models.User.update(users[0], newAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+    });
+
+    describe("afterHooks", function () {
+      it("should trigger an after hook", function () {
+        var didRun = false;
+        models.User.after("update", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var newAttrs = {
+          email: "update3@test.com",
+          password: "fishfishfish"
+        };
+
+        return models.User.update(users[0], newAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
     });
   });
 });

@@ -1,10 +1,10 @@
-var Model = require("../../");
+var ModelGenerator = require("../../");
 var db = require("./db");
-var model = new Model({
+var modelGenerator = new ModelGenerator({
   db: db
 });
 
-exports.User = model.create({
+exports.User = modelGenerator.create({
   tableName: "users",
   schema: {
     id: {
