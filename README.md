@@ -17,7 +17,13 @@ Create a simple data models backed by knex.
 
 ### Model definition
 
-Configure the models with your knex connection.
+First we create a ModelWrapper. This generates models based on any given default options for each model to use such as the knex instance.
+
+See `lib/index.js` for full list of ModelWrapper options.
+
+We then use the ModelWrapper to generate a model. This is given the configuration of the model such as the table name, schema to validate the incoming data as well as hooks and custom validation functions.
+
+See `lib/model.js` for full list of Model constructor options.
 
 ```js
 var ModelWrapper = require("knex-model-wrapper");
@@ -50,7 +56,17 @@ var User = model.create({
 
 ### Using models
 
-See `lib/index.js` for full list of functions.
+Once a model is created it can be used to perform basic functions such as getting, inserting, updating and deleting data.
+
+The basic flow of an insert is:
+
+1. Validate the data against the schema
+2. Call any before hooks
+3. Create a knex query to insert the data into the db
+4. Call any after hooks
+5. Return the saved object from the db
+
+See `lib/model.js` for full list of functions.
 
 ```js
 
@@ -91,7 +107,9 @@ User.delete(5)
 
 Model hooks are triggered before and after an event such as `insert`, `update`, `delete`, `insertMany`, `deleteMany`.
 
-Model hooks can be registered when creating the model or added afterwards.
+Hooks be registered on a model when creating or added afterwards using the `before` and `after` function.
+
+Model hooks should not mutate the data, they are intended to provide a means to trigger other processes such as syncing data to a search engine.
 
 ```js
 // Add a hook when creating the model
