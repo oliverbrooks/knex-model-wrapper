@@ -4,14 +4,14 @@
 ![Dependency Status](https://david-dm.org/oliverbrooks/knex-model-wrapper.svg)
 ![Dev Dependency Status](https://david-dm.org/oliverbrooks/knex-model-wrapper/dev-status.svg)
 
-A lightweight functional wrapper using knex to model data.
+## Objective
 
-## Objectives
+Create a simple data models backed by knex.
 
-* Provide helpers for data retrieval and saving without magic
-* Export plain old JavaScript objects to extend easily
-* Promise based for future proofing (generators/async-await etc)
-* Throw errors which are easy to handle
+* Promise API for data operations (get, insert, update, delete)
+* Validate data going into the db and throw clear errors
+* Provide before and after hooks
+* Export plain old JavaScript objects, no magic
 
 ## Usage
 
@@ -20,12 +20,12 @@ A lightweight functional wrapper using knex to model data.
 Configure the models with your knex connection.
 
 ```js
-var Model = require("knex-model-wrapper");
+var ModelWrapper = require("knex-model-wrapper");
 var db = require("knex")();
 db.connect();
 
-// Configure the model constructor
-var model = new Model({
+// Configure the ModelWrapper to generate models
+var model = new ModelWrapper({
   db: db
 });
 
@@ -57,29 +57,72 @@ See `lib/index.js` for full list of functions.
 User.insert({
   email: "me@example.com",
   password: "a9789zf89209df3232" // hashed password :)
-}).then(function (user) {
-  // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
-}).catch(function (err) {
+})
+.then(function (user) {
+  console.log(user); // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
+})
+.catch(function (err) {
   // do something with validation errors etc
 });
 
 User.get(5).then(function (user) {
-  // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
+  console.log(user); // {id: 5, email: "me@example.com", password: "a9789zf89209df3232"}
 });
 
 User.update({id: 5}, {
   email: "me@test.com"
-}).then(function (user) {
-  // {id: 5, email: "me@test.com", password: "a9789zf89209df3232"}
+})
+.then(function (user) {
+  console.log(user); // {id: 5, email: "me@test.com", password: "a9789zf89209df3232"}
 });
 
-User.count().then(function (user) {
-  // {count: 1}
+User.count()
+.then(function (data) {
+  console.log(data); // {count: 1}
 });
 
-User.delete(5).then(function (user) {
-  // {deleted: 1}
+User.delete(5)
+.then(function (data) {
+  console.log(data); // {deleted: 1}
 });
+```
+
+### Using model hooks
+
+Model hooks are triggered before and after an event such as `insert`, `update`, `delete`, `insertMany`, `deleteMany`.
+
+Model hooks can be registered when creating the model or added afterwards.
+
+```js
+// Add a hook when creating the model
+var User = model.create({
+  tableName: "users",
+  schema: {
+    id: {
+      type: "number"
+    },
+    email: {
+      type: "string",
+      required: true
+    },
+    password: {
+      type: "string",
+      required: true
+    }
+  },
+  beforeHooks: {
+    insert: [
+      function myHook (attrs) {
+        console.log(attrs);
+      }
+    ]
+  }
+});
+
+// Add a hook after creating the model
+User.before("insert", function (attrs) {
+  console.log(attrs); // Do something with the attributes
+})
 ```
 
 ## Pro Tips
