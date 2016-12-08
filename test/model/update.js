@@ -52,9 +52,11 @@ describe("model", function () {
     });
 
     describe("beforeHooks", function () {
-      it("should trigger a before hook", function () {
+      it("should trigger a before update hook", function () {
+        var User = models.generator.create(models.userSchema);
+
         var didRun = false;
-        models.User.before("update", function (_data) {
+        User.before("update", function (_data) {
           expect(_data).to.be.an("object");
           expect(_data.email).to.be.a("string");
           expect(_data.password).to.be.a("string");
@@ -66,7 +68,29 @@ describe("model", function () {
           password: "fishfishfish"
         };
 
-        return models.User.update(users[0], newAttrs)
+        return User.update(users[0], newAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+
+      it("should trigger a before all hook", function () {
+        var User = models.generator.create(models.userSchema);
+
+        var didRun = false;
+        User.before("all", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var newAttrs = {
+          email: "update2@test.com",
+          password: "fishfishfish"
+        };
+
+        return User.update(users[0], newAttrs)
         .then(function () {
           expect(didRun).to.be(true);
         });
@@ -74,9 +98,11 @@ describe("model", function () {
     });
 
     describe("afterHooks", function () {
-      it("should trigger an after hook", function () {
+      it("should trigger an after update hook", function () {
+        var User = models.generator.create(models.userSchema);
+
         var didRun = false;
-        models.User.after("update", function (_data) {
+        User.after("update", function (_data) {
           expect(_data).to.be.an("object");
           expect(_data.email).to.be.a("string");
           expect(_data.password).to.be.a("string");
@@ -88,7 +114,29 @@ describe("model", function () {
           password: "fishfishfish"
         };
 
-        return models.User.update(users[0], newAttrs)
+        return User.update(users[0], newAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+
+      it("should trigger an after all hook", function () {
+        var User = models.generator.create(models.userSchema);
+
+        var didRun = false;
+        User.after("all", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var newAttrs = {
+          email: "update3@test.com",
+          password: "fishfishfish"
+        };
+
+        return User.update(users[0], newAttrs)
         .then(function () {
           expect(didRun).to.be(true);
         });

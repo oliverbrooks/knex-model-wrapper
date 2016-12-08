@@ -2,10 +2,11 @@ process.env.NODE_ENV = "test";
 
 require("./support/db");
 
-require("./configuration");
+require("./model_generator");
 require("./transforms");
 require("./validators");
 require("./model/db");
+require("./model/configuration");
 require("./model/delete");
 require("./model/delete_many");
 require("./model/first");

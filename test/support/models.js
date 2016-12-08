@@ -4,7 +4,10 @@ var modelGenerator = new ModelGenerator({
   db: db
 });
 
-exports.User = modelGenerator.create({
+// Export a pre-configured model generator
+exports.generator = modelGenerator;
+
+var userSchema = {
   tableName: "users",
   schema: {
     id: {
@@ -22,4 +25,8 @@ exports.User = modelGenerator.create({
       required: true
     }
   }
-});
+};
+
+// export User model
+exports.User = modelGenerator.create(userSchema);
+exports.userSchema = userSchema;

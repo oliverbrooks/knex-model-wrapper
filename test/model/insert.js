@@ -60,9 +60,11 @@ describe("model", function () {
     });
 
     describe("beforeHooks", function () {
-      it("should trigger a before hook", function () {
+      it("should trigger a before insert hook", function () {
+        var User = models.generator.create(models.userSchema);
+
         var didRun = false;
-        models.User.before("insert", function (_data) {
+        User.before("insert", function (_data) {
           expect(_data).to.be.an("object");
           expect(_data.email).to.be.a("string");
           expect(_data.password).to.be.a("string");
@@ -73,7 +75,28 @@ describe("model", function () {
           email: "insert@test.com",
           password: "fishfishfish"
         };
-        return models.User.insert(testAttrs)
+        return User.insert(testAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+
+      it("should trigger the before all hook", function () {
+        var User = models.generator.create(models.userSchema);
+
+        var didRun = false;
+        User.before("all", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var testAttrs = {
+          email: "insert@test.com",
+          password: "fishfishfish"
+        };
+        return User.insert(testAttrs)
         .then(function () {
           expect(didRun).to.be(true);
         });
@@ -81,9 +104,11 @@ describe("model", function () {
     });
 
     describe("afterHooks", function () {
-      it("should trigger an after hook", function () {
+      it("should trigger an after insert hook", function () {
+        var User = models.generator.create(models.userSchema);
+
         var didRun = false;
-        models.User.after("insert", function (_data) {
+        User.after("insert", function (_data) {
           expect(_data).to.be.an("object");
           expect(_data.email).to.be.a("string");
           expect(_data.password).to.be.a("string");
@@ -94,7 +119,28 @@ describe("model", function () {
           email: "insert@test.com",
           password: "fishfishfish"
         };
-        return models.User.insert(testAttrs)
+        return User.insert(testAttrs)
+        .then(function () {
+          expect(didRun).to.be(true);
+        });
+      });
+
+      it("should trigger the after all hook", function () {
+        var User = models.generator.create(models.userSchema);
+
+        var didRun = false;
+        User.after("all", function (_data) {
+          expect(_data).to.be.an("object");
+          expect(_data.email).to.be.a("string");
+          expect(_data.password).to.be.a("string");
+          didRun = true;
+        });
+
+        var testAttrs = {
+          email: "insert@test.com",
+          password: "fishfishfish"
+        };
+        return User.insert(testAttrs)
         .then(function () {
           expect(didRun).to.be(true);
         });
