@@ -1,6 +1,6 @@
 {
   "name": "knex-model-wrapper",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Lightweight functional wrapper around knex for modeling data",
   "main": "index.js",
   "scripts": {
